@@ -4,8 +4,15 @@ from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from product.models import Product, Category, SubCategory, HeroCarousel
-from product.serializers import ProductListSerializer, ProductSerializer, ReviewSerializer, ProductCategorySerializer, ProductSubCategorySerializer, HeroCarouselSerializer
-from drf_spectacular.utils import extend_schema, OpenApiExample, OpenApiParameter
+from product.serializers import (
+    ContactUsSerializer, 
+    ProductListSerializer, 
+    ProductSerializer, 
+    ReviewSerializer, 
+    ProductCategorySerializer, 
+    ProductSubCategorySerializer, 
+    HeroCarouselSerializer)
+from drf_spectacular.utils import extend_schema, OpenApiExample, OpenApiResponse
 from backend.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -384,3 +391,16 @@ class ProductHotDealListView(generics.ListAPIView):
     queryset = Product.objects.filter(hot_deal=True)
     serializer_class = ProductListSerializer
     pagination_class = None  # Disable pagination for this view
+
+
+@extend_schema(
+    tags=["Contact Us"],
+    summary="Contact us API",
+    description="Send a message via contact form",
+    request=ContactUsSerializer,
+    responses={
+        201: OpenApiResponse(response=ContactUsSerializer, description="Message created")
+    }
+)
+class ContuctUsCreateView(generics.CreateAPIView):
+    serializer_class = ContactUsSerializer

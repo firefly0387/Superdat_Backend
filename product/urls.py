@@ -12,7 +12,8 @@ from product.views import (
     PopularProductsView,
     LatestProductsView,
     PopularProductsByCategoryView,
-    ProductHotDealListView
+    ProductHotDealListView,
+    ContuctUsCreateView
     )
 
 urlpatterns = [
@@ -29,6 +30,7 @@ urlpatterns = [
     path('products/latest/', LatestProductsView.as_view(), name='latest-products'),
     path('products/popular/category/<int:pk>/', PopularProductsByCategoryView.as_view(), name='popular-products-by-category'),
     path('hot-deals/', ProductHotDealListView.as_view(), name='hot-deal-products'),
+    path('contact-us/', ContuctUsCreateView.as_view(), name='contact-us'),
     path('cart/', include('product.submodules.cart.urls')),
     path('order/', include('product.submodules.order.urls')),
 ]
