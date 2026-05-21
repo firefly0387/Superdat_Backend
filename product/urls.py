@@ -30,5 +30,5 @@ urlpatterns = [
     path('products/popular/category/<int:pk>/', PopularProductsByCategoryView.as_view(), name='popular-products-by-category'),
     path('hot-deals/', ProductHotDealListView.as_view(), name='hot-deal-products'),
     path('cart/', include('product.submodules.cart.urls')),
-    # path('order/', include('product.submodules.order.urls')),
+    path('order/', include('product.submodules.order.urls')),
 ]

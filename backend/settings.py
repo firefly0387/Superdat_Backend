@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     "product",
     "ckeditor",
     "corsheaders",
-
 ]
 
 MIDDLEWARE = [
