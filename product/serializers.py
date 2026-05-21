@@ -7,7 +7,8 @@ from product.models import (
     Category, 
     SubCategory, 
     HeroCarousel,
-    ProductColor 
+    ProductColor,
+    ContactUs
 )
 
 
@@ -236,3 +237,8 @@ class HeroCarouselSerializer(serializers.ModelSerializer):
 
 
 
+class ContactUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactUs
+        fields = ['id', 'name', 'email', 'contact', 'message', 'created_at']
+        read_only_fields = ['id', 'created_at']
