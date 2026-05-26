@@ -110,6 +110,9 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_number
+    
+    class Meta:
+        db_table = 'order_order'
 
 
 class OrderItem(models.Model):
@@ -149,3 +152,6 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product.title} ({self.quantity})"
+    
+    class Meta:
+        db_table = 'order_orderitem'

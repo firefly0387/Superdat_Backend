@@ -6,8 +6,10 @@ from product.models import (
     ProductImage, 
     FAQS,
     HeroCarousel,
-    ProductColor
+    ProductColor,
+    ContactUs
     )
+from product.submodules.order.models import Order
 from django import forms
 from django.utils.html import format_html
 
@@ -97,3 +99,14 @@ class HeroCarouselAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'created_at']
     list_filter = ('created_at',)
 
+
+@admin.register(ContactUs)
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'contact', 'created_at']
+    list_filter = ('created_at',)
+
+
+# @admin.register(Order)
+# class OrderAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'first_name', 'last_name', 'address_name','total_amount', 'created_at']
+#     list_filter = ('created_at',)
