@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_spectacular",
     "product",
+    # "product.submodules.order",
     "ckeditor",
     "corsheaders",
 ]
@@ -224,7 +225,7 @@ JAZZMIN_SETTINGS = {
     "hide_models": ['auth.group', 'product.productimage', 'product.faqs'], 
 
     # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
-    "order_with_respect_to": ["auth", "product", 'product.category', 'product.subcategory', "product.product", "product.herocarousel", "order"],
+    "order_with_respect_to": ["auth", "product", 'product.category', 'product.subcategory', "product.product", "product.herocarousel", "product.contactus"],
 
     # Custom links to append to app groups, keyed on app name
     # "custom_links": {

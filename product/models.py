@@ -29,6 +29,7 @@ class Product(models.Model):
     discount_per = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     average_rating = models.FloatField(null=True, blank=True)
     image = models.ImageField(upload_to="product/image", null=True, blank=True)
+    add_image = models.ImageField(upload_to="product/image", null=True, blank=True)
     hot_deal = models.BooleanField(default=False, )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -172,3 +173,9 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.contact}"
+    
+
+    class Meta:
+        verbose_name = "Contact us"
+        verbose_name_plural = "Contact us"
+        ordering = ['-created_at']
