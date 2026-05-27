@@ -61,9 +61,10 @@ class ProductListSerializer(serializers.ModelSerializer):
     final_price = serializers.SerializerMethodField()
     categories = serializers.SerializerMethodField()
     sub_categories = serializers.SerializerMethodField()
+    colors = ProductColorSerializer(many=True, read_only=True, source='Product_colors')
     class Meta:
         model = Product
-        fields = ['id' ,'categories', 'sub_categories', 'title', 'description', 'sub_description', 'image', 'add_image', 'quantity', 'price', 'discount_per', 'final_price', 'average_rating', 'hot_deal', 'created_at']
+        fields = ['id' ,'categories', 'sub_categories', 'title', 'description', 'sub_description','colors', 'image', 'add_image', 'quantity', 'price', 'discount_per', 'final_price', 'average_rating', 'hot_deal', 'created_at']
         read_only_fields = ['id', 'average_rating', 'created_at']
 
     def get_categories(self, obj):
@@ -140,7 +141,7 @@ class ProductSerializer(serializers.ModelSerializer):
     
     def get_add_image(self, obj):
         request = self.context.get('request')
-        if obj.image:
+        if obj.add_image:
             return request.build_absolute_uri(obj.add_image.url)
         return None
     
