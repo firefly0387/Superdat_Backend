@@ -13,12 +13,13 @@ from product.serializers import (
     ProductCategorySerializer, 
     ProductSubCategorySerializer, 
     HeroCarouselSerializer)
-from drf_spectacular.utils import extend_schema, OpenApiExample, OpenApiResponse
+from drf_spectacular.utils import extend_schema, OpenApiExample, OpenApiResponse, OpenApiRequest
 from backend.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import AllowAny
 
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 @extend_schema(
@@ -58,7 +59,7 @@ This endpoint is publicly accessible and does not require authentication.
 class ProductListView(generics.ListAPIView):
     authentication_classes = []
     permission_classes = [AllowAny]
-    queryset = Product.objects.prefetch_related('categories', 'sub_categories','Product_colors')
+    queryset = Product.objects.prefetch_related('categories', 'sub_categories','Product_colors', 'Product_sizes')
     serializer_class = ProductListSerializer
     pagination_class = StandardResultsSetPagination
     filter_backends = [OrderingFilter, SearchFilter, DjangoFilterBackend]
@@ -109,7 +110,7 @@ class ProductDetailView(APIView):
     permission_classes = [AllowAny]
     def get(self, request, pk):
         try:
-            product = Product.objects.prefetch_related('categories', 'sub_categories', 'images', 'Product_colors','product_faqs', 'product_reviews').get(pk=pk)
+            product = Product.objects.prefetch_related('categories', 'sub_categories', 'images', 'Product_colors', 'Product_sizes', 'product_faqs', 'product_reviews').get(pk=pk)
             serializer = ProductSerializer(product, context={'request': request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Product.DoesNotExist:
@@ -123,8 +124,10 @@ class ProductDetailView(APIView):
     summary="Create Product Review",
     description="Create a review for a specific product using product ID.",
 
-    request= ReviewSerializer,
-
+    request= OpenApiRequest(
+        request=ReviewSerializer,
+    encoding={"image": {"contentType": "image/*"}}),
+    # request=ReviewSerializer,
     responses=ReviewSerializer
 )
 class ProductReviewCreateView(APIView):
@@ -314,6 +317,7 @@ class ProductBySubCategoryView(APIView):
             
             products = Product.objects.select_related().prefetch_related(
                 'Product_colors',
+                'Product_sizes',
                 'sub_categories',
                 'categories'
             ).filter(
@@ -350,7 +354,7 @@ class HeroCarouselListView(generics.ListAPIView):
 class PopularProductsView(generics.ListAPIView):
     authentication_classes = []
     permission_classes = [AllowAny]
-    queryset = Product.objects.prefetch_related('categories', 'sub_categories','Product_colors').order_by(F('average_rating').desc(nulls_last=True))[:10]
+    queryset = Product.objects.prefetch_related('categories', 'sub_categories','Product_colors', 'Product_sizes').order_by(F('average_rating').desc(nulls_last=True))[:10]
     serializer_class = ProductListSerializer
     pagination_class = None  # Disable pagination for this view
 
@@ -364,7 +368,7 @@ class PopularProductsView(generics.ListAPIView):
 class LatestProductsView(generics.ListAPIView):
     authentication_classes = []
     permission_classes = [AllowAny]
-    queryset = Product.objects.prefetch_related('categories', 'sub_categories','Product_colors').order_by('-created_at')[:10]
+    queryset = Product.objects.prefetch_related('categories', 'sub_categories','Product_colors', 'Product_sizes').order_by('-created_at')[:10]
     serializer_class = ProductListSerializer
     pagination_class = None  # Disable pagination for this view
 
@@ -383,7 +387,7 @@ class PopularProductsByCategoryView(APIView):
     def get(self, request, pk):
         try:
             category = Category.objects.get(pk=pk)
-            products = Product.objects.prefetch_related('categories', 'sub_categories','Product_colors').filter(categories=category).order_by(F('average_rating').desc(nulls_last=True))[:10]
+            products = Product.objects.prefetch_related('categories', 'sub_categories','Product_colors', 'Product_sizes').filter(categories=category).order_by(F('average_rating').desc(nulls_last=True))[:10]
             serializer = ProductListSerializer(products, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Category.DoesNotExist:
@@ -399,7 +403,7 @@ class PopularProductsByCategoryView(APIView):
     responses={200: ProductListSerializer(many=True)}
 )
 class ProductHotDealListView(generics.ListAPIView):
-    queryset = Product.objects.prefetch_related('categories', 'sub_categories', 'Product_colors').filter(hot_deal=True)
+    queryset = Product.objects.prefetch_related('categories', 'sub_categories', 'Product_colors', 'Product_sizes' ).filter(hot_deal=True)
     serializer_class = ProductListSerializer
     pagination_class = None  # Disable pagination for this view
 

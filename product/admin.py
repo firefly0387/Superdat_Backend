@@ -7,7 +7,8 @@ from product.models import (
     FAQS,
     HeroCarousel,
     ProductColor,
-    ContactUs
+    ContactUs,
+    ProductSize
     )
 from product.submodules.order.models import Order
 from django import forms
@@ -75,10 +76,16 @@ class ProductColorInline(admin.TabularInline):
     fields = ['name', 'hex_code']
     max_num = 5
 
+class ProductSizeInline(admin.TabularInline):
+    model = ProductSize
+    extra = 1
+    fields = ['name']
+    max_num = 5
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     filter_horizontal = ('categories', 'sub_categories')
-    inlines = [ProductImageInline,ProductColorInline, FAQInline]
+    inlines = [ProductImageInline,ProductColorInline, ProductSizeInline, FAQInline]
     list_display = ('id', 'title', 'price', 'quantity','created_at', 'hot_deal')
     list_filter  = ('created_at','categories','sub_categories')
     search_fields = ('title',)
@@ -102,11 +109,25 @@ class HeroCarouselAdmin(admin.ModelAdmin):
 
 @admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'contact', 'created_at']
-    list_filter = ('created_at',)
+    list_display = ['id', 'name', 'contact', 'unread_indicator', 'created_at']
+    list_filter = ('created_at', 'unread',)
+    actions = ('mark_as_read',)
 
+    def unread_indicator(self, obj):
+        if obj.unread:
+            # Jazzmin respects admin CSS – so HTML works
+            return '🔴'
+        return '✅'
+    unread_indicator.short_description = "Status"
 
-# @admin.register(Order)
-# class OrderAdmin(admin.ModelAdmin):
-#     list_display = ['id', 'first_name', 'last_name', 'address_name','total_amount', 'created_at']
-#     list_filter = ('created_at',)
+    def mark_as_read(self, request, queryset):
+        updated = queryset.update(unread=False)
+        self.message_user(request, f"{updated} package(s) marked as read.")
+    mark_as_read.short_description = "Mark selected as read"
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        obj = self.get_object(request, object_id)
+        if obj and obj.unread:
+            obj.unread = False
+            obj.save()
+        return super().change_view(request, object_id, form_url, extra_context)

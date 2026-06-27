@@ -86,6 +86,8 @@ class Order(models.Model):
         default=0
     )
 
+    unread = models.BooleanField(default=True)
+
     # =========================
     # Timestamps
     # =========================
