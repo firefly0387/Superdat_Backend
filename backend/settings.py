@@ -246,27 +246,15 @@ JAZZMIN_SETTINGS = {
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
 
-        #tour model icons
-        "tour.TourPackage": "fas fa-plane-departure",
-        "tour.RentalPackage": "fas fa-car",
-        "tour.Itenarary": "fas fa-route",
-        "tour.Inquiry": "fas fa-question",
-        "tour.Review": "fas fa-star",
-        "tour.Inclusion": "fas fa-check",
-        "tour.Exclusion": "fas fa-times",
-        "tour.FAQs": "fas fa-question-circle",
-        "tour.ContactUs": "fas fa-address-book",
-        "tour.TourPackageImage": "fas fa-image",
-        "tour.RentalPackageImage": "fas fa-image",
-        "tour.PackageCategory": "fas fa-list",
-        "tour.PackageSubCategory": "fas fa-list",
-        "tour.SiteTheme": "fas fa-paint-brush",
-        "tour.AboutUs": "fas fa-info-circle",
+        #product model icons
+        "product.Category": "fa-solid fa-folder",
+        "product.SubCategory": "fa-solid fa-layer-group",
+        "product.Product": "fas fa-box",
+        "product.HeroCarousel": "fas fa-images",
+        "product.ContactUs": "fas fa-address-book",
 
-        #booking model icons
-        "booking.BookTourPackage": "fas fa-ticket",
-        "booking.BookRentalPackage": "fas fa-ticket",
-        "booking.CustomizeTrip": "fas fa-pencil",
+        #order model icons
+        "order.Order": "fa-solid fa-calendar",
 
 
     },

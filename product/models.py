@@ -9,6 +9,10 @@ class Category(models.Model):
     def __str__(self):
         return self.title
     
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+    
 class SubCategory(models.Model):
     title = models.CharField(max_length=255)
     category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.CASCADE)
@@ -17,6 +21,10 @@ class SubCategory(models.Model):
 
     def __str__(self):
         return self.title
+    
+    class Meta:
+        verbose_name = "Sub Category"
+        verbose_name_plural = "Sub Categories"
     
 class Product(models.Model):
     categories = models.ManyToManyField(Category, related_name='products_category', null=True, blank=True)
@@ -64,6 +72,13 @@ class ProductColor(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='Product_colors')
     name = models.CharField(max_length=50)
     hex_code = models.CharField(max_length=7)
+
+    def __str__(self):
+        return self.name
+    
+class ProductSize(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='Product_sizes')
+    name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
@@ -169,6 +184,7 @@ class ContactUs(models.Model):
     email = models.EmailField()
     contact = models.IntegerField()
     message = models.TextField()
+    unread = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

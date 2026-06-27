@@ -8,11 +8,13 @@ from product.models import (
     SubCategory, 
     HeroCarousel,
     ProductColor,
-    ContactUs
+    ContactUs,
+    ProductSize
 )
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
     class Meta:
         model = Review
         fields = [
@@ -57,14 +59,21 @@ class ProductColorSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'hex_code']
         read_only_fields = ['id']
 
+class ProductSizeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductSize
+        fields = ['id', 'name']
+        read_only_fields = ['id']
+
 class ProductListSerializer(serializers.ModelSerializer):
     final_price = serializers.SerializerMethodField()
     categories = serializers.SerializerMethodField()
     sub_categories = serializers.SerializerMethodField()
     colors = ProductColorSerializer(many=True, read_only=True, source='Product_colors')
+    sizes = ProductSizeSerializer(many=True, read_only=True, source='Product_sizes')
     class Meta:
         model = Product
-        fields = ['id' ,'categories', 'sub_categories', 'title', 'description', 'sub_description','colors', 'image', 'add_image', 'quantity', 'price', 'discount_per', 'final_price', 'average_rating', 'hot_deal', 'created_at']
+        fields = ['id' ,'categories', 'sub_categories', 'title', 'description', 'sub_description','colors', 'sizes', 'image', 'add_image', 'quantity', 'price', 'discount_per', 'final_price', 'average_rating', 'hot_deal', 'created_at']
         read_only_fields = ['id', 'average_rating', 'created_at']
 
     def get_categories(self, obj):
@@ -93,12 +102,13 @@ class ProductSerializer(serializers.ModelSerializer):
     faqs = FAQSerializer(many=True, read_only=True, source='product_faqs')
     reviews = ReviewSerializer(many=True, read_only=True, source= 'product_reviews')
     colors = ProductColorSerializer(many=True, read_only=True, source='Product_colors')
+    sizes = ProductSizeSerializer(many=True, read_only=True, source='Product_sizes')
     final_price = serializers.SerializerMethodField()
     categories = serializers.SerializerMethodField()
     sub_categories = serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = ['id' , 'categories', 'sub_categories','title', 'description', 'sub_description', 'colors', 'image', 'add_image', 'additional_images', 'faqs', 'quantity', 'price', 'discount_per', 'final_price','hot_deal', 'average_rating', 'reviews', 'created_at']
+        fields = ['id' , 'categories', 'sub_categories','title', 'description', 'sub_description', 'colors', 'sizes', 'image', 'add_image', 'additional_images', 'faqs', 'quantity', 'price', 'discount_per', 'final_price','hot_deal', 'average_rating', 'reviews', 'created_at']
         read_only_fields = ['id', 'average_rating', 'created_at']
 
 
