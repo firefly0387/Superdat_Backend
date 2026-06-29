@@ -30,6 +30,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'product_title',
             'product_image',
             'quantity',
+            'product_color',
+            'product_size',
             'price',
             'total_price',
         ]
@@ -102,6 +104,8 @@ class CreateOrderItemSerializer(serializers.Serializer):
 
     product = serializers.IntegerField()
     quantity = serializers.IntegerField(min_value=1)
+    color = serializers.CharField(required=False, allow_null=True)
+    size = serializers.CharField(required=False, allow_null=True)
 
     def validate_product(self, value):
 
@@ -123,6 +127,8 @@ class CreateOrderSerializer(serializers.ModelSerializer):
 
     product_id = serializers.IntegerField(write_only=True, required=False)
     quantity = serializers.IntegerField(write_only=True, required=False)
+    color = serializers.CharField(write_only=True, required=False, allow_null=True)
+    size = serializers.CharField(write_only=True, required=False, allow_null=True)
 
     class Meta:
         model = Order
@@ -138,6 +144,8 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             'cart_id',
             'product_id',
             'quantity',
+            'color',
+            'size',
         ]
 
     @transaction.atomic
@@ -146,6 +154,8 @@ class CreateOrderSerializer(serializers.ModelSerializer):
         cart_id = validated_data.pop('cart_id', None)
         product_id = validated_data.pop('product_id', None)
         quantity = validated_data.pop('quantity', None)
+        color = validated_data.pop('color', None)
+        size = validated_data.pop('size', None)
 
         order = Order.objects.create(
             order_number=f"ORD-{uuid.uuid4().hex[:10].upper()}",
@@ -179,6 +189,8 @@ class CreateOrderSerializer(serializers.ModelSerializer):
                     order=order,
                     product=product,
                     quantity=qty,
+                    product_color=color,
+                    product_size=size,
                     price=product.price,
                     total_price=total
                 )
@@ -205,6 +217,8 @@ class CreateOrderSerializer(serializers.ModelSerializer):
                 order=order,
                 product=product,
                 quantity=quantity,
+                product_color=color,
+                product_size=size,
                 price=product.price,
                 total_price=total
             )

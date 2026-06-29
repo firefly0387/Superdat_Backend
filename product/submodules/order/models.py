@@ -132,6 +132,18 @@ class OrderItem(models.Model):
 
     quantity = models.PositiveIntegerField(default=1)
 
+    product_color = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
+    product_size = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2
