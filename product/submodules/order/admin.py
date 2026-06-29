@@ -1,11 +1,22 @@
 
 from django.contrib import admin
 from product.submodules.order.models import (
-   Order
+   Order, OrderItem
    )
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 0
+    fields = ['product', 'quantity',
+            'product_color',
+            'product_size',
+            'price',
+            ]
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'first_name', 'last_name', 'address','total_amount', 'unread_indicator', 'ordered_at']
+    inlines = [OrderItemInline]
+    list_display = ['id', 'first_name', 'last_name', 'address','total_amount', 'unread_indicator', 'status','ordered_at']
     list_filter = ('ordered_at', 'unread')
     actions = ['mark_as_read']
 

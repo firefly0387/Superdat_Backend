@@ -3,10 +3,14 @@ attrs==26.1.0
 decouple==0.0.7
 Django==6.0.4
 django-ckeditor==6.7.3
+django-cors-headers==4.9.0
+django-filter==25.2
 django-jazzmin==3.0.4
 django-js-asset==3.1.2
+django-silk==5.5.0
 djangorestframework==3.17.1
 drf-spectacular==0.29.0
+gprof2dot==2025.4.14
 inflection==0.5.1
 jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
