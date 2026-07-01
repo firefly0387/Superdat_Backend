@@ -10,7 +10,6 @@ from product.models import (
     ContactUs,
     ProductSize
     )
-from product.submodules.order.models import Order
 from django import forms
 from django.utils.html import format_html
 
